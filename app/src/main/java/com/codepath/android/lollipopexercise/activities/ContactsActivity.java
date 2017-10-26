@@ -1,17 +1,22 @@
 package com.codepath.android.lollipopexercise.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.codepath.android.lollipopexercise.R;
 import com.codepath.android.lollipopexercise.adapters.ContactsAdapter;
 import com.codepath.android.lollipopexercise.models.Contact;
 
 import java.util.List;
+
+import static com.codepath.android.lollipopexercise.models.Contact.getRandomContact;
 
 
 public class ContactsActivity extends AppCompatActivity {
@@ -60,6 +65,25 @@ public class ContactsActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == R.id.add) {
+            final Contact contact = Contact.getRandomContact(this);
+            contacts.add(contact);
+            mAdapter.notifyDataSetChanged();
+            rvContacts.scrollToPosition(contacts.size() - 1);
+//            rvContacts.scroll
+
+            Snackbar.make(rvContacts, R.string.contact_added, Snackbar.LENGTH_LONG)
+                    .setActionTextColor(ContextCompat.getColor(ContactsActivity.this, R.color.accent))
+                    .setAction(R.string.undo, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    contacts.remove(contact);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }).show();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
