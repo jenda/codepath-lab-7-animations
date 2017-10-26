@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -117,7 +119,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.VH> {
                         // Pass contact object in the bundle and populate details activity.
                         Intent intent = new Intent(mContext, DetailsActivity.class);
                         intent.putExtra(DetailsActivity.EXTRA_CONTACT, contact);
-                        mContext.startActivity(intent);
+
+//                        ActivityOptionsCompat options = ActivityOptionsCompat.
+//                                makeSceneTransitionAnimation(mContext, ivProfile,
+//                                        ivProfile.getTransitionName());
+
+                        Pair<View, String> p1 = Pair.create((View)ivProfile, "profile");
+                        Pair<View, String> p2 = Pair.create(vPalette, "palette");
+                        Pair<View, String> p3 = Pair.create((View)tvName, "text");
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(mContext, p1, p2, p3);
+                        mContext.startActivity(intent, options.toBundle());
                     }
                 }
             });
